@@ -16,7 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Pages\EnvStatus.cshtml">
+    <Content Update="Pages\dlEnvelope.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Pages\EnvRecipe.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
   </ItemGroup>
