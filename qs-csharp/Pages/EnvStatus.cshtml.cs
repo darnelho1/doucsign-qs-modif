@@ -24,7 +24,7 @@ namespace qs_csharp.Pages
         {
             ApiClient apiClient = new ApiClient(basePath);
             apiClient.Configuration.AddDefaultHeader("Authorization", "Bearer " + accessToken);
-            EnvelopesApi envelopesApi = new EnvelopesApi();
+            EnvelopesApi envelopesApi = new EnvelopesApi(apiClient.Configuration);
             Recipients recips = envelopesApi.ListRecipients(accountId, envelopeId);
 
             // print the JSON response
@@ -33,7 +33,7 @@ namespace qs_csharp.Pages
             // Prettyprint the results
             string json = JsonConvert.SerializeObject(recips);
             string jsonFormatted = JValue.Parse(json).ToString(Formatting.Indented);
-            ViewData["EnvelopeInformation:"] = recips;
+            ViewData["EnvelopeInformation:"] = jsonFormatted;
             Console.WriteLine(jsonFormatted);
 
             return;
