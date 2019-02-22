@@ -12,34 +12,29 @@ namespace qs_csharp.Pages
     public class EnvStatusModel : PageModel
     {
         // Constants need to be set:
-        private const string accessToken = "eyJ0eXAiOiJNVCIsImFsZyI6IlJTMjU2Iiwia2lkIjoiNjgxODVmZjEtNGU1MS00Y2U5LWFmMWMtNjg5ODEyMjAzMzE3In0.AQkAAAABAAUABwCAnIr2YpjWSAgAgNytBKaY1kgCAJ8giZesq0hAr93A-qwGx1gVAAEAAAAYAAEAAAAFAAAADQAkAAAAZjBmMjdmMGUtODU3ZC00YTcxLWE0ZGEtMzJjZWNhZTNhOTc4MACA8wPcYZjWSDcAYEcIb3TtBU6HTBBHVB7pfg.odP1vQkwKGD7uV7fmCKru3Ij0blgIJBCkB-4sSx9vyRrKDpxdTrdJ-t6Y0CEM5HcqO_axno-VT9YyviSPF6Bpo_XXPDU2lyNfAGekQLcHFzAL3QlTnH2R8t6OxdbRyt7tT3xwjot79BsNv11dDDd7dJ1V1rEv-WF09514u7vhAgVQGh-Kd1QwVk6c7yqurpELR2EWYNcHzHP0LYYjawCgvEsvII_NAc0tOhaG0c3U1uyIvWO2i_xz-04LzXi3-lmfsOgO0naxqhqYz5f9q1FQDlZ8zgM8tcyXWW8ZJ88ZgsQBz-tHrW-bElveGCXS9KguVngEROStZm5GUsM1SLB7g";
+        private const string accessToken = "eyJ0eXAiOiJNVCIsImFsZyI6IlJTMjU2Iiwia2lkIjoiNjgxODVmZjEtNGU1MS00Y2U5LWFmMWMtNjg5ODEyMjAzMzE3In0.AQkAAAABAAUABwCAcnfylJjWSAgAgLKaANiY1kgCAJ8giZesq0hAr93A-qwGx1gVAAEAAAAYAAEAAAAFAAAADQAkAAAAZjBmMjdmMGUtODU3ZC00YTcxLWE0ZGEtMzJjZWNhZTNhOTc4MACA8wPcYZjWSDcAYEcIb3TtBU6HTBBHVB7pfg.aJn81whnuKK2SzA7036Mz8TyH0q_bIWpGdsW2gzkWMmvJDO1Vt-bjarmjVtJQ5j1p-K249I-UVOD53H9nwxJzKSbedO9cDOMSL53vKQI79FwtwN_ctekIAcZriIwGQyuoHPp5U2wyO8uCxV5x_SAUKfoiQ0LI6X5ul3M43K-FaBSu2lMNIfPOAaO42AvzlZNCkq2J2ZiLczRJa-3R997KS7nJbr7M7DPpBPgZd-I2F-dWRxs6mjlWMbRX4uRd4D4Pm8o6fhdqz70MP1XJUH18SXOrGYtfI4p1pWE68x88VxuFGvNeAI0NzfUtsIYsUIAIvXp-MNCEBWVZiZtY3MFjQ";
         private const string accountId = "3094776";
-        private const int envelopesAgeDays = -10;
+        private const string envelopeId = "f23acc3f-0f03-4130-8b3d-716d536ad776";
+        //private const int envelopesAgeDays = -10;
 
         // Additional constants
         private const string basePath = "https://demo.docusign.net/restapi";
 
         public void OnGet()
         {
-            // List the user's envelopes created in the last 10 days
-            // 1. Create request options
-            // 2. Use the SDK to list the envelopes
-
-            // 1. Create request options
-            ListStatusChangesOptions options = new ListStatusChangesOptions();
-            DateTime date = DateTime.Now.AddDays(envelopesAgeDays);
-            options.fromDate = date.ToString("yyyy/MM/dd");
-
-            // 2. Use the SDK to list the envelopes
             ApiClient apiClient = new ApiClient(basePath);
             apiClient.Configuration.AddDefaultHeader("Authorization", "Bearer " + accessToken);
-            EnvelopesApi envelopesApi = new EnvelopesApi(apiClient.Configuration);
-            EnvelopesInformation results = envelopesApi.ListStatusChanges(accountId, options);
+            EnvelopesApi envelopesApi = new EnvelopesApi();
+            Recipients recips = envelopesApi.ListRecipients(accountId, envelopeId);
+
+            // print the JSON response
+            Console.WriteLine("Recipients:\n{0}", JsonConvert.SerializeObject(recips));
 
             // Prettyprint the results
-            string json = JsonConvert.SerializeObject(results);
+            string json = JsonConvert.SerializeObject(recips);
             string jsonFormatted = JValue.Parse(json).ToString(Formatting.Indented);
-            ViewData["results"] = jsonFormatted;
+            ViewData["EnvelopeInformation:"] = recips;
+            Console.WriteLine(jsonFormatted);
 
             return;
         }
