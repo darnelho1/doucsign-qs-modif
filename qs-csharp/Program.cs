@@ -62,6 +62,7 @@ namespace qs_csharp
             // first we use the OAuth authorization code grant to get an API access_token
             samples.OAuthAuthorizationCodeFlowTest();
             CreateWebHostBuilder(args).Build().Run();
+            
         }
 
         public void OAuthAuthorizationCodeFlowTest()
@@ -74,11 +75,12 @@ namespace qs_csharp
             // Initiate the browser session to the Authentication server
             // so the user can login.
             string accountServerAuthUrl = apiClient.GetAuthorizationUri(client_id, redirect_uri, true, stateOptional);
-            System.Diagnostics.Process.Start("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",accountServerAuthUrl);
+            Process.Start("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",accountServerAuthUrl);
         }
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>();
+        
 
     }
 }
